@@ -1,0 +1,613 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "TurnOnline.biz Ecosystem Purchase Statistics microservice, a collection of stats collected from the ecosystem services.",
+        "version": "1.0",
+        "title": "Purchase Statistics"
+    },
+    "host": "${env.ENDPOINTS_SERVICE_NAME}",
+    "basePath": "/api/statistics",
+    "tags": [
+        {
+            "name": "Event Statistics"
+        },
+        {
+            "name": "Common"
+        }
+    ],
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/v1/events/{event_id}/attendees": {
+            "get": {
+                "tags": [
+                    "Event Statistics"
+                ],
+                "summary": "List event attendees",
+                "description": "List attendees who has signed-up to attend this event or even filtered for particular part of event.",
+                "operationId": "listAttendees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "event_id",
+                        "in": "path",
+                        "description": "The unique event identification. An ID of the product from the product catalog.",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "The position of the first result to retrieve, numbered from 0.",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "format": "int32",
+                        "x-example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The maximum number of results to retrieve.",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "format": "int32",
+                        "x-example": 50
+                    },
+                    {
+                        "name": "partId",
+                        "in": "query",
+                        "description": "The event part identification within event.",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-example": 9
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The list of filtered event attendees.",
+                        "schema": {
+                            "$ref": "#/definitions/AttendeeCollection"
+                        }
+                    },
+                    "400": {
+                        "description": "The error when target product does not have an event.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "The error when the authentication credential fails.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "The error when client tries to retrieve attendees of event that does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It's a failure of the server. The client can repeat the request without modifications at any later time.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "503": {
+                        "description": "The service is unavailable or the server has timed out processing of the request. The client may repeat the request without modifications at any later time.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "firebase-a0435120": []
+                    }
+                ]
+            }
+        },
+        "/v1/events/{event_id}/stats": {
+            "get": {
+                "tags": [
+                    "Event Statistics"
+                ],
+                "summary": "Get event statistics",
+                "description": "Get event statistics incl. list of attendees with possibility to filter who has signed-up to attend this event.",
+                "operationId": "GetEventStats",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "event_id",
+                        "in": "path",
+                        "description": "The unique event identification. An ID of the product from the product catalog.",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "The position of the first result to retrieve, numbered from 0.",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "format": "int32",
+                        "x-example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The maximum number of results to retrieve.",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "format": "int32",
+                        "x-example": 50
+                    },
+                    {
+                        "name": "partId",
+                        "in": "query",
+                        "description": "The event part identification within event.",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-example": 9
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get event statistics incl. filtered list of attendees.",
+                        "schema": {
+                            "$ref": "#/definitions/EventStatistics"
+                        }
+                    },
+                    "400": {
+                        "description": "The error when target product does not have an event.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "The error when the authentication credential fails.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "The error when client tries to retrieve attendees of event that does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "It's a failure of the server. The client can repeat the request without modifications at any later time.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "503": {
+                        "description": "The service is unavailable or the server has timed out processing of the request. The client may repeat the request without modifications at any later time.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "firebase-a0435120": []
+                    }
+                ]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "firebase-a0435120": {
+            "type": "oauth2",
+            "authorizationUrl": "",
+            "flow": "implicit",
+            "x-google-issuer": "https://securetoken.google.com/turn-online-eu",
+            "x-google-jwks_uri": "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com",
+            "x-google-audiences": "turn-online-eu"
+        }
+    },
+    "definitions": {
+        "Attendee": {
+            "type": "object",
+            "required": [
+                "event"
+            ],
+            "properties": {
+                "prefix": {
+                    "type": "string",
+                    "description": "The attendee name prefix."
+                },
+                "firstName": {
+                    "type": "string",
+                    "description": "The attendee first name."
+                },
+                "middleName": {
+                    "type": "string",
+                    "description": "The attendee middle name."
+                },
+                "lastName": {
+                    "type": "string",
+                    "description": "The attendee last name."
+                },
+                "suffix": {
+                    "type": "string",
+                    "description": "The attendee name suffix."
+                },
+                "email": {
+                    "type": "string",
+                    "description": "The contact email address used for notification purposes."
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "The contact phone number used for notification purposes."
+                },
+                "note": {
+                    "type": "string",
+                    "description": "A client's notes."
+                },
+                "event": {
+                    "description": "Event to be attended by this attendee.",
+                    "$ref": "#/definitions/EventByAttendee"
+                },
+                "billing": {
+                    "description": "Entity who paid for the event.",
+                    "$ref": "#/definitions/AttendeeBillingEntity"
+                }
+            },
+            "description": "Attendee details who will attend event."
+        },
+        "AttendeeBillingEntity": {
+            "type": "object",
+            "properties": {
+                "accountId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The payer user account identification of a business partner entity if any (TurnOnline.biz Ecosystem account ID). If it's not provided a payer either did not login while order check-in or does not have an account at all."
+                },
+                "contactEmail": {
+                    "type": "string",
+                    "description": "The contact email used either for notification purposes or for dealing with a potential issues, related only to the associated order."
+                },
+                "contactPhone": {
+                    "type": "string",
+                    "description": "The contact phone number used for dealing with potential issues related only to the associated order."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Payer name."
+                },
+                "street": {
+                    "type": "string",
+                    "description": "Payer street and street number."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "Payer city."
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Payer address ISO 3166 alpha-2 country code. It’s case insensitive."
+                },
+                "postcode": {
+                    "type": "string",
+                    "description": "Payer postal code."
+                },
+                "companyId": {
+                    "type": "string",
+                    "description": "The company business identification number."
+                },
+                "taxId": {
+                    "type": "string",
+                    "description": "The company tax payer identification number."
+                },
+                "vatId": {
+                    "type": "string",
+                    "description": "The company value added tax identification number (VAT ID)."
+                },
+                "invoiceId": {
+                    "type": "array",
+                    "description": "The identification of the invoice (proforma, tax document) that has been issued to pay the event attended by this attendee.",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "invoiceNumber": {
+                    "type": "array",
+                    "description": "The invoice number identification of the invoice (proforma, tax document) that has been issued to pay the event attended by this attendee.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "paymentKey": {
+                    "type": "string",
+                    "description": "The payment key as an ID to identify a payment related to the event attended by this attendee."
+                },
+                "variableSymbol": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The variable symbol to identify a payment related to the event attended by this attendee. The ID limited to 10 digits."
+                }
+            },
+            "description": "An entity who paid for the event."
+        },
+        "AttendeeCollection": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "Attendee collection wrapper.",
+                    "items": {
+                        "$ref": "#/definitions/Attendee"
+                    }
+                }
+            }
+        },
+        "EventByAttendee": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The unique identification of the event attended by attendee."
+                },
+                "orderId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The unique order identification where this attendee has made his or her sign-up."
+                },
+                "parts": {
+                    "type": "array",
+                    "description": "The array of event part(s) identification within event if any. The list of IDs of an event parts that attendee has signed-up for. It matches to the template IDs of the pricing item of EventPart type. Unique only within event.",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "description": "Event identification attended by attendee."
+        },
+        "EventLocation": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The event place name or very short description."
+                },
+                "street": {
+                    "type": "string",
+                    "description": "The event place street and street number."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "The event place city."
+                },
+                "country": {
+                    "type": "string",
+                    "description": "The event place ISO 3166 alpha-2 country code."
+                },
+                "postcode": {
+                    "type": "string",
+                    "description": "The event place post code."
+                },
+                "infoEmail": {
+                    "type": "string",
+                    "description": "The contact email in order to provide more information regarding event."
+                },
+                "infoPhone": {
+                    "type": "string",
+                    "description": "The contact phone in order to provide more information regarding event."
+                },
+                "latitude": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "The event place address latitude geographic coordinate, generated by the service."
+                },
+                "longitude": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "The event place address longitude geographic coordinate, generated by the service."
+                }
+            },
+            "description": "An address where event will take place."
+        },
+        "EventPart": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The ID of the event part. It matches to the template ID of the EventPart type pricing item within event product definition in product catalog. Unique only within event."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The event part headline."
+                },
+                "numberOf": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Number of attendees who has signed-up to attend this part."
+                },
+                "on": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The event part date and time."
+                },
+                "snippet": {
+                    "type": "string",
+                    "description": "The event part short description, a brief overview. The plain text only."
+                }
+            },
+            "description": "The event part definition."
+        },
+        "EventStatistics": {
+            "type": "object",
+            "properties": {
+                "attendees": {
+                    "type": "array",
+                    "description": "The filtered list of attendees who has signed-up to attend this event.",
+                    "items": {
+                        "$ref": "#/definitions/Attendee"
+                    }
+                },
+                "begin": {
+                    "description": "The event start day definition.",
+                    "$ref": "#/definitions/EventBegin"
+                },
+                "end": {
+                    "description": "The event last day definition.",
+                    "$ref": "#/definitions/EventEnd"
+                },
+                "deadline": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The last day for the registration."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The event name."
+                },
+                "location": {
+                    "description": "An address where event will take place.",
+                    "$ref": "#/definitions/EventLocation"
+                },
+                "numberOf": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Number of all attendees who has signed-up to attend this event."
+                },
+                "parts": {
+                    "type": "array",
+                    "description": "The list of the event parts that has been defined for this event.",
+                    "items": {
+                        "$ref": "#/definitions/EventPart"
+                    }
+                },
+                "seats": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The number of seats available for sale."
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "description": "Error body wrapper.",
+                    "$ref": "#/definitions/ErrorBody"
+                }
+            }
+        },
+        "ErrorBody": {
+            "type": "object",
+            "required": [
+                "code",
+                "errors",
+                "message"
+            ],
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ErrorReason"
+                    }
+                },
+                "code": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The HTTP status code."
+                },
+                "message": {
+                    "type": "string",
+                    "description": "The error message."
+                }
+            }
+        },
+        "ErrorReason": {
+            "type": "object",
+            "required": [
+                "domain",
+                "message",
+                "reason"
+            ],
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "description": "The overall scope of the error message."
+                },
+                "reason": {
+                    "type": "string",
+                    "description": "The error reason (error key)."
+                },
+                "message": {
+                    "type": "string",
+                    "description": "The detailed error message."
+                }
+            }
+        },
+        "EventBegin": {
+            "type": "object",
+            "properties": {
+                "on": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The event start date."
+                },
+                "from": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The event start time."
+                },
+                "to": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The event end time of the 1st day."
+                }
+            }
+        },
+        "EventEnd": {
+            "type": "object",
+            "properties": {
+                "on": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The event end date."
+                },
+                "from": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The event start time of the last day."
+                },
+                "to": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "The event end time of the last day."
+                }
+            }
+        }
+    }
+}
